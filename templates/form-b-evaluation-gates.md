@@ -328,10 +328,10 @@ Mỗi con số kèm một câu lý do, lấy từ `data/world.json` → `ops_lim
 
 | Khoá | Giá trị bàn đặt | Lý do (một câu, có số) |
 |---|---|---|
-| `business.daily_refund_cap_vnd` | | |
-| `business.cost_budget_per_ticket_vnd` | | |
-| `business.pilot_scope` (all / warehouse / percent) | | |
-| `business.roi_min` | | |
+| `business.daily_refund_cap_vnd` | `2000000` VND/ngày | Theo `ops_limits.daily_auto_refund_budget_vnd = 2000000`, không tự hoàn vượt ngân sách Finance; khoản làm vượt trần chuyển người duyệt. |
+| `business.cost_budget_per_ticket_vnd` | `1500` VND/ticket (tiền máy) | Theo `ops_limits.max_llm_cost_per_ticket_vnd = 1500`; tổng chi phí gồm công duyệt/phí giữ chỗ vẫn phải ≤ 8.000đ/ticket theo tiêu chí đã ký. |
+| `business.pilot_scope` (all / warehouse / percent) | `{"mode":"all","warehouses":[],"percent":100}` | Giữ 100% phạm vi đánh giá vòng 1; `ops_facts` cho công suất 1 người × 6 ca/giờ × 8 giờ = 48 ca duyệt/ca, nên chỉ giữ phạm vi này khi report đạt SLA, chi phí và ROI, nếu chưa đạt thì thu hẹp và đo lại. |
+| `business.roi_min` | `0.25` (25%) | Làm tay tốn 10.000đ/ticket theo `ops_facts`; khi hoàn sai bằng 0 và tổng chi phí ≤ 8.000đ/ticket, ROI tối thiểu là `(10000 - 8000) / 8000 = 0,25`, khớp tiêu chí đã ký. |
 
 ### B7.5 · Câu 2.10 · Cổng con người, vận hành, pháp lý + Runbook phần 1–3
 
