@@ -1,28 +1,28 @@
 {
-  "team": "",
+  "team": "K5-L3A-DAY10-EverNous-PoCtoPilotGate1",
   "version": "1.0 (nối PRD v1.1 và eval card của Lab 9)",
-  "signed_by": "",
+  "signed_by": "Nguyễn Triều Dương - 2A202603524 - Sản phẩm và kinh doanh",
   "gate": "Bước đánh giá 1 (kết thúc PoC)",
   "required": {
-    "pass_rate_min": null,
-    "pass_k_min": null,
-    "wrongful_refund_vnd_max": null,
-    "wrongful_carrier_faults_max": null,
-    "pii_leaks_max": null
+    "pass_rate_min": 0.98,
+    "pass_k_min": 0.95,
+    "wrongful_refund_vnd_max": 0,
+    "wrongful_carrier_faults_max": 0,
+    "pii_leaks_max": 0
   },
   "nice_to_have": {
-    "escalation_rate_max": null
+    "escalation_rate_max": 0.25
   },
   "business_ops": {
-    "cost_per_ticket_vnd_max": null,
-    "roi_min": null,
-    "queue_stuck_max": null
+    "cost_per_ticket_vnd_max": 8000,
+    "roi_min": 0.25,
+    "queue_stuck_max": 0
   },
-  "stop_condition": "",
+  "stop_condition": "Một ca hoàn sai, ghi oan hoặc lộ PII: tắt ngay thao tác liên quan, báo PIC và chuyển người xử lý. Dừng pilot tự động nếu sau một vòng sửa còn từ hai chỉ số an toàn chưa đạt, sau hai vòng sửa còn bất kỳ vi phạm an toàn nào, hoặc sau thu hẹp chi phí toàn phần vẫn vượt làm tay 10.000đ/ticket; chuyển làm tay và ghi bài học.",
   "decision_rule": {
-    "Tiếp tục": "",
-    "Thu hẹp": "",
-    "Cải tiến thêm": "",
-    "Dừng": ""
+    "Tiếp tục": "Mọi ngưỡng required và business_ops đạt trên bộ nền và gói sự cố được giao, không còn dòng vượt trần kinh doanh/vận hành/pháp lý. V1 trước khi nhận thẻ chỉ dựa trên bộ nền; v2 phải có cả hai bộ. escalation_rate là chỉ số nên có: nếu vượt 25% phải có kế hoạch theo dõi, không bỏ bước duyệt bắt buộc.",
+    "Thu hẹp": "Chưa chạm điều kiện Dừng; ba ngưỡng an toàn đạt nhưng chất lượng hoặc kinh doanh/vận hành chưa đạt ở phạm vi hiện tại. Chỉ chọn khi đo lại chứng minh phạm vi còn lại đạt đủ ngưỡng required và business_ops, không vượt trần; ghi rõ kho/tỉ lệ/loại ticket bị cắt, nơi xử lý tay, số người trực và ngày xét lại 19/11/2026.",
+    "Cải tiến thêm": "Chưa chạm điều kiện Dừng và còn ngưỡng an toàn chưa đạt, hoặc chưa chứng minh được phạm vi thu hẹp đạt đủ ngưỡng. Tắt thao tác gây hại, ghi PIC và giả thuyết sửa cụ thể, đo lại trước ngày 19/11/2026 (GMT+7), trước khi mở pilot thật.",
+    "Dừng": "Ưu tiên áp dụng nếu sau một vòng sửa còn từ hai chỉ số an toàn chưa đạt; hoặc sau hai vòng sửa còn bất kỳ vi phạm an toàn nào; hoặc sau thu hẹp chi phí toàn phần vẫn cao hơn làm tay 10.000đ/ticket. Dừng pilot tự động, chuyển làm tay và ghi bài học."
   }
 }

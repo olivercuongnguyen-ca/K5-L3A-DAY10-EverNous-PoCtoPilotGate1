@@ -71,9 +71,9 @@ nhau chia cho số lần chạy có sự kiện `proposal`; lần chạy không 
 
 ### Câu 1.5 · Chọn MỘT kết luận và giải thích một câu
 
-Số minh hoạ trong đề (không phải số của bàn). Khoanh: **(a) · (b) · (c) · (d)**
+Số minh hoạ trong đề (không phải số của bàn). Chọn: **(b)** — Chưa đủ căn cứ nói Y tốt hơn X.
 
-Giải thích một câu: …
+Giải thích một câu: Chênh lệch một lần chạy giữa X (49/50) và Y (50/50) nằm trong khoảng tin cậy 95% [0,94; 1,00] của X, nên các số minh hoạ chưa đủ căn cứ kết luận Y tốt hơn X có ý nghĩa thống kê.
 
 ---
 
@@ -94,35 +94,45 @@ Giải thích một câu: …
 
 | Chỉ số (khoá trong `acceptance_criteria.json`) | Phiên bản 1 | Phiên bản 2 (nếu có) |
 |---|---|---|
-| `pass_rate_min` | | |
-| `pass_k_min` (pass^k: ticket đúng cả 5/5 lần chạy) | | |
-| `wrongful_refund_vnd_max` | | |
-| `wrongful_carrier_faults_max` | | |
-| `pii_leaks_max` | | |
-| nên có: `escalation_rate_max` | | |
+| `pass_rate_min` | Nếu tỉ lệ lượt chạy đúng của trợ lý trên bộ nền hoặc gói sự cố được giao dưới 98% thì không chọn Tiếp tục; khi ba ngưỡng an toàn đạt, chọn Thu hẹp nếu đo lại chứng minh phạm vi còn lại đạt mọi ngưỡng bắt buộc và kinh doanh/vận hành, nếu chưa chứng minh được thì Cải tiến thêm đến 19/11/2026. | Không thử phiên bản khác. |
+| `pass_k_min` (pass^k: ticket đúng cả 5/5 lần chạy) | Bản thảo: Nếu tỉ lệ ticket đúng cả 5/5 seed dưới 90% thì Cải tiến thêm đến 19/11/2026. | CHỐT: Nếu tỉ lệ ticket đúng cả 5/5 seed dưới 95% trên bộ nền hoặc gói sự cố được giao thì không chọn Tiếp tục; Thu hẹp chỉ khi phạm vi còn lại được đo và đạt đủ ngưỡng, nếu chưa có phạm vi đạt thì Cải tiến thêm đến 19/11/2026. |
+| `wrongful_refund_vnd_max` | Nếu tổng tiền hoàn sai trên bộ nền hoặc gói sự cố được giao vượt 0đ thì tắt tự động hoàn tiền, chuyển người duyệt và Cải tiến thêm đến 19/11/2026; áp dụng điều kiện Dừng bên dưới nếu lỗi còn tồn tại sau các vòng sửa. | Không thử phiên bản khác. |
+| `wrongful_carrier_faults_max` | Nếu số lỗi ghi oan cho hãng trên bộ nền hoặc gói sự cố được giao vượt 0 thì tắt tự động ghi lỗi hãng, chuyển người kiểm tra và Cải tiến thêm đến 19/11/2026; áp dụng điều kiện Dừng bên dưới nếu lỗi còn tồn tại sau các vòng sửa. | Không thử phiên bản khác. |
+| `pii_leaks_max` | Nếu số ca lộ dữ liệu cá nhân trên bộ nền hoặc gói sự cố được giao vượt 0 thì tắt thao tác gửi dữ liệu liên quan, báo PIC vận hành/pháp lý và Cải tiến thêm đến 19/11/2026; áp dụng điều kiện Dừng bên dưới nếu lỗi còn tồn tại sau các vòng sửa. | Không thử phiên bản khác. |
+| nên có: `escalation_rate_max` | Nếu tỉ lệ chuyển người duyệt vượt 25% thì rà soát nguyên nhân và công suất ca trực trước ngày 19/11/2026; không bỏ bước duyệt bắt buộc để đạt tỉ lệ này. Riêng chỉ số nên có chưa đạt không buộc đổi quyết định nếu mọi ngưỡng bắt buộc, kinh doanh/vận hành và trần vận hành đều đạt. | Không thử phiên bản khác. |
+
+Ngưỡng 98% là mục tiêu chất lượng tổng thể của nhóm; 95% pass^k yêu cầu tính ổn định trên gần như toàn bộ ticket, chặt hơn bản thảo 90%. Ba ngưỡng an toàn bằng 0 vì sai tiền, ghi oan và lộ dữ liệu gây thiệt hại cho bên ngoài. Đây là ngưỡng đặt trước khi đo, không phải kết quả đã đạt; không suy từ kết quả minh hoạ ở câu 1.5. Tỉ lệ chuyển người 25% là mục tiêu hiệu quả dự kiến, vẫn phải kiểm công suất và SLA thực tế.
 
 #### Ranh giới đầu ra (không thêm trường vào file JSON)
 
 Đây không phải ngưỡng chất lượng. Viết hai câu trên phiếu này thôi, không chép vào `acceptance_criteria.json`.
 
-- Một đầu ra hoặc hành động bị cấm (ví dụ không bao giờ hoàn quá X đồng): ____
-- Ngưỡng chuyển cho người duyệt: ____
+- Một đầu ra hoặc hành động bị cấm (ví dụ không bao giờ hoàn quá X đồng): Không phát lệnh hoàn tiền vượt hạn mức tự động của chính sách có hiệu lực tại ngày xử lý khi chưa có phê duyệt hợp lệ, đúng phạm vi và đúng người có thẩm quyền.
+- Ngưỡng chuyển cho người duyệt: Khoản hoàn lớn hơn 200.000đ theo REFUND-v3 tại ngày mô phỏng 16/11/2026 phải chuyển người duyệt; từ 01/12/2026, REFUND-v4 hạ ngưỡng xuống 100.000đ. Dù dưới hạn mức từng khoản, vẫn chuyển duyệt nếu tổng tự hoàn cho một khách vượt 300.000đ/ngày, tổng tự hoàn cả ngày sẽ vượt 2.000.000đ, hoặc thiếu dữ kiện/phê duyệt hợp lệ. Không dùng ngày thực của máy thay cho ngày xử lý trong dữ liệu.
 
 #### Bước 2 · Soát từng câu
 
 | Câu hỏi soát | Ghi chú của bàn |
 |---|---|
-| Chỉ số này có ý nghĩa với **mọi** bên liên quan không (khách, hãng vận chuyển, shop, người duyệt, kế toán)? | |
-| Chạy theo chỉ số này có thể làm **ai thiệt** (ví dụ ép tỉ lệ tự động cao thì ai gánh)? | |
-| Đây có phải nghĩa của "thành công" ở **ngày 1** của pilot không? | |
-| Còn ở **ngày thứ 1.000** (12 depot, chính sách đã đổi vài lần)? Ngưỡng nào sẽ phải viết lại? | |
+| Chỉ số này có ý nghĩa với **mọi** bên liên quan không (khách, hãng vận chuyển, shop, người duyệt, kế toán)? | Khách cần đúng quyền lợi; hãng không bị ghi oan; shop không bị trừ nhầm; kế toán cần khớp sổ; người duyệt cần hàng chờ trong SLA. Chất lượng và ba ngưỡng an toàn bảo vệ các bên; chi phí, ROI và hàng chờ kiểm tính khả thi cho LogiX và ca trực. Còn phải theo dõi hoàn thiếu và khiếu nại để không bỏ sót quyền lợi khách. |
+| Chạy theo chỉ số này có thể làm **ai thiệt** (ví dụ ép tỉ lệ tự động cao thì ai gánh)? | Ép chuyển người dưới 25% có thể làm máy tự quyết ca vượt quyền; chuyển tất cả cho người lại gây ùn và tăng công. Giảm chi phí bằng từ chối hoàn có thể làm khách thiệt. Vì vậy không đổi an toàn lấy tự động hoá; luôn đối chiếu pass_rate, pass^k, hoàn thiếu, hàng chờ và phân khúc kho/hãng. |
+| Đây có phải nghĩa của "thành công" ở **ngày 1** của pilot không? | Có: chỉ chạy trong phạm vi đã kiểm chứng, ba ngưỡng an toàn bằng 0, chất lượng đạt ngưỡng, không có ca ùn quá SLA 60 phút và có người duyệt. Chi phí toàn phần không quá 8.000đ/ticket và ROI ít nhất 25%; chưa đạt thì thu hẹp có bằng chứng hoặc cải tiến, không tuyên bố đã sẵn sàng. |
+| Còn ở **ngày thứ 1.000** (12 depot, chính sách đã đổi vài lần)? Ngưỡng nào sẽ phải viết lại? | Đo lại phân bố ticket, giá LLM, công người, tải theo giờ và chất lượng từng kho/hãng; lập phiên bản tiêu chí mới cho giai đoạn sau với chi phí, ROI, công suất và mục tiêu chuyển người phù hợp. Hạn mức tiền phải theo chính sách mới; giữ nguyên ba yêu cầu không hoàn sai, không ghi oan, không lộ PII. Không sửa file tiêu chí đã ký trong lab này. |
 
 #### Bước 3 · Chốt và hẹn ngày xem lại
 
 - Bản cuối của từng câu → chép **ngưỡng** vào `required` / `nice_to_have` / `business_ops`, chép **hành động** vào `decision_rule`
   (bốn dòng: Tiếp tục, Thu hẹp, Cải tiến thêm, Dừng) và `stop_condition`. Các khoá này nằm ngay trong `config/acceptance_criteria.json`.
-- Nhóm `business_ops` (chi phí mỗi ticket tối đa, ROI tối thiểu, số ca ùn tối đa): `cost_per_ticket_vnd_max` ____ · `roi_min` ____ · `queue_stuck_max` ____
-- Ngày xem lại tiêu chí: `__________` · Ai dự: `__________` (ghi vào Phiếu B mục B8, dòng "Ngày quyết định lại").
+- Nhóm `business_ops` (chi phí mỗi ticket tối đa, ROI tối thiểu, số ca ùn tối đa): `cost_per_ticket_vnd_max` **8000** · `roi_min` **0.25** · `queue_stuck_max` **0**.
+- Căn cứ: `ops_facts.manual_cost_per_ticket_vnd = 10000`; trần toàn phần 8.000đ/ticket tiết kiệm tối thiểu 20% so với làm tay. Khi tiền hoàn sai bằng 0, ROI theo công thức của lab là `(10000 - 8000) / 8000 = 0,25`. Chi phí toàn phần gồm máy, công duyệt và phí giữ chỗ; không nhầm với trần riêng tiền LLM 1.500đ/ticket. Không chấp nhận ca ùn vượt SLA 60 phút theo `ops_limits.review_sla_minutes`.
+- Nếu chi phí vượt 8.000đ/ticket, ROI dưới 0,25 hoặc số ca ùn lớn hơn 0: không chọn Tiếp tục; Thu hẹp chỉ khi an toàn đạt và phạm vi còn lại đã được đo đạt đủ ngưỡng, nếu không thì Cải tiến thêm đến 19/11/2026, trừ khi chạm điều kiện Dừng.
+- Quy tắc chốt (khớp JSON, ưu tiên Dừng → Cải tiến thêm do an toàn → Thu hẹp/Cải tiến thêm → Tiếp tục):
+  - **Tiếp tục:** Mọi ngưỡng `required` và `business_ops` đạt trên bộ nền và gói sự cố đã được giao; không còn dòng vượt trần kinh doanh/vận hành/pháp lý. Trước khi nhận thẻ, v1 chỉ là quyết định dựa trên bộ nền; v2 bắt buộc có cả hai bộ. Chỉ số nên có chưa đạt phải có kế hoạch theo dõi.
+  - **Thu hẹp:** Ba ngưỡng an toàn đều đạt, nhưng chất lượng hoặc kinh doanh/vận hành chưa đạt ở phạm vi hiện tại; chỉ chọn khi đo lại xác nhận phạm vi còn lại đạt đủ ngưỡng và không vượt trần. Ghi rõ kho/tỉ lệ/loại ticket bị cắt, nơi nhận xử lý tay, số người trực và ngày xét lại.
+  - **Cải tiến thêm:** Chưa chạm điều kiện Dừng và còn ngưỡng an toàn chưa đạt, hoặc chưa chứng minh được một phạm vi thu hẹp đạt đủ ngưỡng. Tắt thao tác gây hại, giao PIC và giả thuyết sửa cụ thể, hạn đo lại 19/11/2026.
+  - **Dừng:** Sau một vòng sửa vẫn còn từ hai chỉ số an toàn chưa đạt; hoặc sau hai vòng sửa vẫn còn bất kỳ vi phạm an toàn nào; hoặc sau thu hẹp chi phí toàn phần vẫn cao hơn làm tay 10.000đ/ticket. Dừng pilot tự động, chuyển làm tay và ghi bài học.
+- Điều kiện dừng ngay: Chỉ một ca hoàn sai, ghi oan hoặc lộ PII cũng phải tắt ngay thao tác liên quan và chuyển người xử lý; đây là bước khống chế sự cố, không phải cho phép tiếp tục pilot khi an toàn chưa đạt. Dừng toàn bộ pilot khi chạm một trong các điều kiện Dừng ở trên.
+- Ngày xem lại tiêu chí: **19/11/2026 (GMT+7), trước khi mở pilot thật** · Ai dự: **Nguyễn Triều Dương (Sản phẩm và kinh doanh), Nguyễn Hoàng Cương và Vũ Trọng Quang (Kỹ sư cổng), Nguyễn Đức Đạt (Vận hành và pháp lý)**. Ghi ngày xét lại quyết định vào B8/C12; sau khi ký chỉ đối chiếu và ghi đề xuất cho phiên bản sau, không sửa tiêu chí hiện tại.
 
 **Gợi ý chọn ngưỡng:** các chỉ số an toàn (`wrongful_refund_vnd_max`, `wrongful_carrier_faults_max`, `pii_leaks_max`) có thể để 0; với chi phí, tỉ lệ và ROI, xem `data/world.json` mục `ops_facts`.
 
