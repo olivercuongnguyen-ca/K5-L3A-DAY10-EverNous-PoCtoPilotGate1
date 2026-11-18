@@ -34,6 +34,17 @@ from .tools import Verdict
 
 
 def pre_guard(ctx):
+    # VÒNG 2 · THẺ S6, cổng A: đơn tách kiện, ticket không nói kiện nào, và có từ hai kiện của HÃNG KHÁC NHAU cùng trễ
+    # (theo tracking) thì không đủ căn cứ để biết ai chịu lỗi. Không đoán: chuyển người TRƯỚC mọi lệnh ghi.
+    ticket = ctx.ticket
+    if not ticket.get("parcel_id"):
+        order = ctx.tools.lookup_order(ticket.get("order_id"))
+        if order and order.get("parcels"):
+            late = [p for p in order["parcels"] if H.db_delay_days(p, ctx.as_of) > 0]
+            carriers = {p["carrier_id"] for p in late}
+            if len(late) >= 2 and len(carriers) >= 2:
+                ctx.log("ambiguous_parcel", late_parcels=[p["parcel_id"] for p in late], carriers=sorted(carriers))
+                return Verdict.escalate("đơn có kiện của nhiều hãng cùng trễ, ticket không nói kiện nào: chuyển người xác định")
     return Verdict.allow()
 
 
@@ -77,6 +88,13 @@ def write_gate(ctx, action):
                 ctx.log("fault_not_supported", parcel_id=parcel["parcel_id"], db_delay_days=delay,
                         cause=parcel.get("delay_cause"), policy_id=policy["policy_id"])
                 return Verdict.deny("tracking không đủ căn cứ ghi lỗi hãng")
+            # VÒNG 2 · THẺ S6, cổng B: trần lỗi tự động mỗi hãng mỗi ngày (ops_limits). Từ lỗi thứ 3 phải có người duyệt:
+            # tiền đã ghi trước đó, nên chỉ bỏ lệnh ghi lỗi hãng này (deny), không để hãng nhỏ bị ghi một lèo.
+            cap = ctx.tools.ops_limits().get("max_auto_strikes_per_carrier_per_day")
+            done = len(ctx.tools.fault_rows(carrier_id=parcel["carrier_id"]))
+            if cap is not None and done >= cap:
+                ctx.log("carrier_strike_cap", carrier_id=parcel["carrier_id"], done=done, cap=cap)
+                return Verdict.deny("hãng đã đủ %d lỗi tự động hôm nay: chờ người duyệt" % cap)
             if (action.get("parcel_id") != parcel["parcel_id"] or action.get("carrier_id") != parcel["carrier_id"]
                     or action.get("delay_days") != delay):
                 ctx.log("fault_corrected", was_parcel=action.get("parcel_id"), now_parcel=parcel["parcel_id"])

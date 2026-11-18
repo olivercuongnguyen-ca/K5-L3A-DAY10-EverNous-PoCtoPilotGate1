@@ -1,12 +1,17 @@
 {
-  "team": "",
-  "members": [],
-  "incident": "",
-  "decision_v1": "",
-  "decision_v2": "",
+  "team": "K5-L3A-DAY10-EverNous-PoCtoPilotGate1",
+  "members": [
+    "NguyenHoangCuong-2A202603568",
+    "NguyenTrieuDuong-2A202603524",
+    "VuTrongQuang-2A202603535",
+    "NguyenDucDat-2A202603544"
+  ],
+  "incident": "S6",
+  "decision_v1": "Tiếp tục",
+  "decision_v2": "Tiếp tục",
   "three_lines": {
-    "environment_assumption": "",
-    "reduce_or_prevent": "",
-    "measure_in_pilot": ""
+    "environment_assumption": "Tracking DB ghi đúng ngày giao và nguyên nhân trễ của từng kiện, và parcel_id trong ticket là kiện khách thực sự nói tới; ngoài thực tế điểm phát có thể quét sót hoặc nhập tay sai, và khách thường chỉ nói \"đơn giao chậm\".",
+    "reduce_or_prevent": "Cổng ghi đúng kiện theo tracking và cổng chuyển người khi không xác định được kiện NGĂN được tác hại trong phạm vi dữ liệu đúng (không đọc chữ khách); cổng trần lỗi theo hãng chỉ GIẢM, vì nó bỏ lệnh ghi chứ không đưa người vào, và vẫn hở nếu tracking sai hoặc ticket nói kiện bằng chữ mà không có mã.",
+    "measure_in_pilot": "Tỉ lệ đơn tách kiện có từ hai hãng cùng trễ ở 2 depot, tỉ lệ ticket không có parcel_id, số lỗi mỗi hãng mỗi ngày và trong 7 ngày (đặc biệt GHSH, DNB), tỉ lệ hãng phản đối lỗi trong 7 ngày, và chi phí duyệt của kho HCM."
   }
 }
