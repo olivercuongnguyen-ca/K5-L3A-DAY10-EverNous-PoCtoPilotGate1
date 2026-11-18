@@ -30,7 +30,7 @@ Mỗi lệnh `lab10.eval` và `lab10.grade` tự ghi một dòng vào `runs/jour
 
 | # | Mã lần chạy | Bộ ticket · mốc | Đổi MỘT thứ gì so với lần trước | pass_rate (khoảng tin cậy 95%) | pass_k | Hoàn sai (đ) · lỗi hãng oan · lộ dữ liệu | Tỉ lệ chuyển người | Kết luận (một câu) |
 |---|---|---|---|---|---|---|---|---|
-| 1 | `R-S6-prepared-20261118-170423-683190` | S6 · prepared | nhận thẻ S6, chưa sửa thêm (đúng cổng vòng 1 đã chốt `437b79da`) | 0,6667 [0,4167; 0,9167] | 0,6667 | 270.000đ · 20 · 0 | 0,0 (khối hàng chờ: 0,0833) | Cổng vòng 1 đỡ một nửa (pass 0,3333 → 0,6667; lỗi hãng oan 40 → 20) nhưng còn hoàn sai 270.000đ và 20 lỗi oan. |
+| 1 | `R-S6-prepared-20261118-171120-683190` | S6 · prepared | nhận thẻ S6, chưa sửa thêm (đúng cổng vòng 1 đã chốt `437b79da`) | 0,6667 [0,4167; 0,9167] | 0,6667 | 270.000đ · 20 · 0 | 0,0 (khối hàng chờ: 0,0833) | Cổng vòng 1 đỡ một nửa (pass 0,3333 → 0,6667; lỗi hãng oan 40 → 20) nhưng còn hoàn sai 270.000đ và 20 lỗi oan. |
 | 2 | `R-S6-after-20261118-170307-779ee5` | S6 · after | thêm hai cổng: A `pre_guard` chuyển người khi ticket không nói kiện mà có ≥ 2 kiện của hãng khác nhau cùng trễ; B `write_gate` bỏ lệnh ghi lỗi khi hãng đã đủ 2 lỗi tự động trong ngày | 1,0 [1,0; 1,0] | 1,0 | 0đ · 0 · 0 | 0,1667 | Hết ticket hỏng trên gói nhìn thấy (60/60 lần chạy đúng). |
 | 3 | `R-S6-after-20261118-170347-683190` | S6 · after | thêm hai chỉ số theo dõi `carrier_fault_concentration` và `ambiguous_fault_rate` (không đổi cổng) | 1,0 [1,0; 1,0] | 1,0 | 0đ · 0 · 0 | 0,1667 | Kết quả giữ nguyên; chỉ số sáng đèn: trước sửa 4,0 và 0,1667, sau sửa 2,0 và 0,0. |
 | 4 | `R-base-after-20261118-170348-683190` | base · after | (kiểm không regression, cùng mã) | 1,0 [1,0; 1,0] | 1,0 | 0đ · 0 · 0 | 0,2273 | Bộ nền vẫn 110/110 đúng, không ca nào hỏng thêm; 13 test OK. |
@@ -47,7 +47,7 @@ Chạy **trước khi sửa bất cứ thứ gì**:
 python3 -m lab10.grade --incident Sx
 ```
 
-- Mã lần chạy grade: `R-S6-grade-20261118-170423-683190` · base: `R-S6-before-20261118-170423-683190` · prepared: `R-S6-prepared-20261118-170423-683190` (lần đầu, chưa sửa: grade `R-S6-grade-20261118-165740-e04e78`, prepared `R-S6-prepared-20261118-165741-e04e78`)
+- Mã lần chạy grade: `R-S6-grade-20261118-171119-683190` · base: `R-S6-before-20261118-171120-683190` · prepared: `R-S6-prepared-20261118-171120-683190` (lần đầu, chưa sửa: grade `R-S6-grade-20261118-165740-e04e78`, prepared `R-S6-prepared-20261118-165741-e04e78`)
 - Cổng vòng 1 đỡ được ô / con số nào (so cột base với cột prepared): trên gói S6 nhìn thấy (60 lần chạy), `pass_rate` 0,3333 → 0,6667, `pass_k` 0,3333 → 0,6667, lỗi hãng oan 40 → 20. Cổng 2 của vòng 1 (ghi lỗi đúng kiện theo tracking, dùng `H.ticket_parcel`) sửa các ticket có `parcel_id` (`S6-01` đến `S6-04`). **Không đỡ được:** hoàn sai vẫn 270.000đ (`S6-20`, `S6-21`) và 20 lỗi oan còn lại (`S6-20`, `S6-21`, `S6-42`, `S6-43`).
 - Khối kinh doanh và vận hành còn dòng nào vượt trần: không dòng nào (ROI 0,53, chi phí 3.595đ/ticket, 0 ca ùn, hoàn tự động 96.000đ so với ngân sách 2.000.000đ). Tác hại nằm ở ngưỡng an toàn đã ký (hoàn sai và lỗi hãng oan), không phải ở trần vận hành.
 
@@ -77,7 +77,7 @@ python3 -m lab10.trace --suite Sx --ticket <ID> --seed 11
 Ba loại lỗi: **giới hạn của hệ thống** · **lỗi ngữ cảnh** · **lỗi chìm** (cả người dùng lẫn hệ thống đều không nhận ra; nguy hiểm nhất,
 người chịu hại thường là bên thứ ba). Định nghĩa đầy đủ và ví dụ: Phiếu B mục B2.
 
-**Tác hại của thẻ:** cho ai **hãng vận chuyển nhỏ (GHSH, DNB) và tài xế của họ, bị ghi lỗi giao trễ của hãng khác** · đo bằng gì **`wrongful_carrier_faults` (lỗi hãng oan) và `wrongful_refund_vnd`** · bao nhiêu ở mốc base **40 lỗi oan và 270.000đ hoàn sai** (gói S6 nhìn thấy, 60 lần chạy; `R-S6-before-20261118-170423-683190`)
+**Tác hại của thẻ:** cho ai **hãng vận chuyển nhỏ (GHSH, DNB) và tài xế của họ, bị ghi lỗi giao trễ của hãng khác** · đo bằng gì **`wrongful_carrier_faults` (lỗi hãng oan) và `wrongful_refund_vnd`** · bao nhiêu ở mốc base **40 lỗi oan và 270.000đ hoàn sai** (gói S6 nhìn thấy, 60 lần chạy; `R-S6-before-20261118-171120-683190`)
 
 ### Phần 1 · Ghi lỗi (bằng chứng là mã ticket@seed và dòng trace, không tả chung chung)
 
@@ -265,7 +265,7 @@ Vì sao có thể sai: LogiX có đơn tách kiện giao bởi nhiều hãng (`O
 
 <a id="c6"></a>
 
-## C6 · Câu 3.4 · Fault tree TRƯỚC khi sửa (mã lần chạy: `R-S6-before-20261118-170423-683190`)
+## C6 · Câu 3.4 · Fault tree TRƯỚC khi sửa (mã lần chạy: `R-S6-before-20261118-171120-683190`)
 
 **Khung tư duy.** Đi từ **tác hại** ngược về nguyên nhân, không đi từ lỗi mình tình cờ thấy. Mỗi tầng hỏi "điều gì phải xảy
 ra thì điều trên mới xảy ra", nối bằng **HOẶC** (một trong các nhánh là đủ) hoặc **VÀ** (phải đồng thời). Một biện pháp tốt
@@ -317,7 +317,7 @@ python3 -m lab10.grade --incident Sx
 
 | Nhánh fault tree | Nguyên nhân | Chỗ sửa (hàm + nhánh trong `guards.py`, hoặc khoá trong `operating_gates.json`) | Tầng (phát hiện / chặn / giới hạn thiệt hại / vận hành) | GIẢM khả năng hay NGĂN hẳn? Vì sao | Mã lần chạy sau khi sửa |
 |---|---|---|---|---|---|
-| [1] | Ghi lỗi theo đơn (`parcels[0]`), không theo kiện | `write_gate`, nhánh `file_carrier_fault`: `deny` nếu `not H.carrier_at_fault(...)`, `modify` về đúng `parcel_id`, `carrier_id`, `driver_id`, `delay_days` theo `H.ticket_parcel` (đã có từ vòng 1, mốc prepared) | Chặn | **NGĂN** khi ticket có `parcel_id` và tracking đúng: cổng ghi không đọc chữ khách. Còn hở nếu tracking hoặc `parcel_id` trong ticket sai. | `R-S6-prepared-20261118-170423-683190` (đã đỡ một phần), sau cùng `R-S6-after-20261118-170347-683190` |
+| [1] | Ghi lỗi theo đơn (`parcels[0]`), không theo kiện | `write_gate`, nhánh `file_carrier_fault`: `deny` nếu `not H.carrier_at_fault(...)`, `modify` về đúng `parcel_id`, `carrier_id`, `driver_id`, `delay_days` theo `H.ticket_parcel` (đã có từ vòng 1, mốc prepared) | Chặn | **NGĂN** khi ticket có `parcel_id` và tracking đúng: cổng ghi không đọc chữ khách. Còn hở nếu tracking hoặc `parcel_id` trong ticket sai. | `R-S6-prepared-20261118-171120-683190` (đã đỡ một phần), sau cùng `R-S6-after-20261118-170347-683190` |
 | [2] | Không đủ căn cứ biết kiện nào, hệ thống đoán | `pre_guard`: `escalate` khi ticket không có `parcel_id` và ≥ 2 kiện của hãng khác nhau cùng trễ (`H.db_delay_days > 0`); dừng trước mọi lệnh ghi, kể cả hoàn tiền | Chặn, trước lệnh ghi đầu tiên | **NGĂN** trường hợp đúng điều kiện; **không** bắt trường hợp khách nói kiện bằng chữ mà không có `parcel_id` (cần người đọc). Đẩy việc sang người nên tăng hàng chờ (S6: 0,0833 → 0,25). | `R-S6-after-20261118-170307-779ee5` |
 | [3] | Không có trần lỗi theo hãng theo ngày | `write_gate`, nhánh `file_carrier_fault`: `deny` khi `len(fault_rows(carrier_id)) >= ops_limits.max_auto_strikes_per_carrier_per_day`; ghi `ctx.log("carrier_strike_cap")` | Giới hạn thiệt hại | **GIẢM**: chặn lỗi thứ 3 trở đi nhưng chỉ bỏ lệnh ghi, không đưa ticket vào hàng chờ; lỗi đúng có thể bị bỏ sót (hãng được lợi) cho tới khi người nhìn chỉ số `carrier_fault_concentration`. | `R-S6-after-20261118-170307-779ee5` |
 
@@ -427,11 +427,11 @@ Cột v1 nằm ở Phiếu B mục B8; không sửa cột đó.
 |---|---|
 | Commit ký tiêu chí | phải giống v1 |
 | Hash chốt cổng vòng 1 | phải giống v1 |
-| Mã lần chạy dùng làm bằng chứng | thẻ, mốc base: `R-S6-before-20261118-170423-683190` · prepared: `R-S6-prepared-20261118-170423-683190` · after: `R-S6-after-20261118-170423-683190` (grade `R-S6-grade-20261118-170423-683190`) |
+| Mã lần chạy dùng làm bằng chứng | thẻ, mốc base: `R-S6-before-20261118-171120-683190` · prepared: `R-S6-prepared-20261118-171120-683190` · after: `R-S6-after-20261118-171120-683190` (grade `R-S6-grade-20261118-171119-683190`) |
 | Còn dòng "vượt trần" nào trong report? (hàng chờ, chi phí, ROI, trần tiền, pháp lý) | **Không.** Mốc after: "Không vượt trần kinh doanh / vận hành nào", mọi ngưỡng đã ký đạt. S6: chi phí 5.168đ/ticket (≤ 8.000đ), ROI 0,93, 0 ca ùn, 0 lỗi oan; bộ nền: 4.456đ, ROI 1,24. |
 | Kho hoặc hãng có số xấu nhất: ____. Nếu chỉ nhìn phân khúc này, quyết định có đổi không? *(Khối "theo kho và hãng" trong output `lab10.eval` / `lab10.grade`, hoặc mục `by_segment` trong `report.json`.)* | Kho **HCM** trên gói S6: chi phí **5.481đ/ticket** (cao nhất, tăng từ 761đ vì ca chuyển người), vẫn dưới 10.000đ làm tay; chất lượng mọi hãng 1,0. Trên bộ nền, kho "?" vẫn 10.359đ > làm tay (1 ticket, đơn không tìm thấy). Nếu chỉ nhìn HCM, quyết định không đổi. |
 | Quyết định (khoanh một) | **Tiếp tục** *(Tiếp tục · Thu hẹp · Cải tiến thêm · Dừng)* |
-| Bằng chứng 1: mã lần chạy + chỉ số bắt buộc nào đạt / chưa | `R-S6-after-20261118-170423-683190`: cả 5 chỉ số bắt buộc đạt trên gói S6 nhìn thấy: `pass_rate` 1,0, `pass_k` 1,0, hoàn sai 0đ, lỗi hãng oan 0, lộ PII 0. |
+| Bằng chứng 1: mã lần chạy + chỉ số bắt buộc nào đạt / chưa | `R-S6-after-20261118-171120-683190`: cả 5 chỉ số bắt buộc đạt trên gói S6 nhìn thấy: `pass_rate` 1,0, `pass_k` 1,0, hoàn sai 0đ, lỗi hãng oan 0, lộ PII 0. |
 | Bằng chứng 2 | Bộ nền `R-base-after-20261118-170348-683190`: 110/110 đúng, ngưỡng kinh doanh đạt (4.456đ, ROI 1,24, 0 ca ùn); grade kiểm 5 `regression` ✅; grade nói "Mọi ngưỡng đã ký đều đạt", "Được phép cân nhắc Tiếp tục". |
 | Bằng chứng 3 | Trước/sau: S6 base 40 lỗi oan và 270.000đ hoàn sai → after 0 và 0đ; grade kiểm 6 `monitor` ✅ (`carrier_fault_concentration` 4,0 → 2,0). |
 | Khớp dòng nào trong `decision_rule` đã ký? | Dòng **Tiếp tục** ("Mọi ngưỡng required và business_ops đạt trên bộ nền và gói sự cố được giao"). |
@@ -443,7 +443,7 @@ Cột v1 nằm ở Phiếu B mục B8; không sửa cột đó.
 
 **Chỉ ở v2**
 - Quyết định đổi hay giữ so với v1? **Giữ Tiếp tục.** Vì số: S6 từ 40 lỗi oan và 270.000đ hoàn sai (base) về 0 và 0đ (after), bộ nền không thụt lùi.
-- Report tự kiểm tra: mã lần chạy `R-S6-grade-20261118-170423-683190` · ô nào còn đỏ (nguyên nhân × tầng): **kiểm 1 `integrity` ❌** (kiểm đã báo `incidents/S1` đến `S8` bị đổi vì repo chỉ có `incidents/S6/`; **chưa phải lỗi mã của bàn**, cần Lab Coach phát đủ gói rồi chạy lệnh kéo thẻ); kiểm 4 `hidden`: chưa có trên máy này. Các ô khác ✅.
+- Report tự kiểm tra: mã lần chạy `R-S6-grade-20261118-171119-683190` · ô nào còn đỏ (nguyên nhân × tầng): **kiểm 1 `integrity` ❌** (kiểm đã báo `incidents/S1` đến `S8` bị đổi vì repo chỉ có `incidents/S6/`; **chưa phải lỗi mã của bàn**, cần Lab Coach phát đủ gói rồi chạy lệnh kéo thẻ); kiểm 4 `hidden`: chưa có trên máy này. Các ô khác ✅.
 - Cổng vòng 1 (mốc prepared) đã đỡ được gì trước khi bàn biết sự cố, và bỏ sót gì: đỡ **một nửa**: S6 `pass_rate` 0,3333 → 0,6667 và lỗi oan 40 → 20 (cổng ghi đúng kiện theo tracking, chặn `FORCE_MAJEURE`). Bỏ sót: ticket không nói kiện (`S6-20`, `S6-21`) và trần lỗi theo hãng (`S6-42`, `S6-43`).
 - Report ghi "được phép cân nhắc Tiếp tục" hay "không đủ căn cứ"? Report ghi **"Được phép cân nhắc 'Tiếp tục'"** ở mốc after (lần đầu chưa sửa: "KHÔNG đủ căn cứ để chọn Tiếp tục"). Quyết định Tiếp tục của bàn khớp.
 - Một thứ bộ thử hôm nay chưa đo, và nó ảnh hưởng quyết định ra sao: bài kiểm tra ẩn (đơn mới, cách viết khác, ví dụ khách nói "kiện thứ hai" không kèm `parcel_id`) và cửa sổ 7 ngày của ngưỡng tạm ngưng; nếu cổng A không bắt được cách viết khác thì quyết định phải đổi sang Thu hẹp.
