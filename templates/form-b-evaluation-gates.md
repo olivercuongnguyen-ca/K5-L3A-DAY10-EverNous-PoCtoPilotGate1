@@ -32,7 +32,7 @@ Mọi con số trong quyết định Gate 1 phải trỏ về một dòng ở đ
 | 1 | `R-base-before-20261118-155125-b45eeb` | base · base | (baseline, chưa có cổng) | 0,9909 [0,9727; 1,0] | 0,9545 | 20.000đ · 1 · 0 | 0,2273 | Đạt pass_rate, pass_k, PII, chi phí, ROI; chưa đạt 2 ngưỡng an toàn do một ticket hỏng (`T-002@55`: hoàn sai 20.000đ và ghi oan hãng VNX). |
 | 2 | `R-base-after-20261118-162302-015955` | base · after | (cổng vòng 1: tiền theo tracking, lỗi hãng có căn cứ, tin hãng chỉ trường cho phép, từ chối nhưng đủ điều kiện) | 1,0 [1,0; 1,0] | 1,0 | 0đ · 0 · 0 | 0,2273 | Cả 5 ngưỡng bắt buộc và 3 ngưỡng kinh doanh đạt trên bộ nền; `T-002@55` hết hỏng, không ca đúng nào hỏng. Bộ nền chỉ có 22 ticket, nên 1,0 chưa chứng minh gì về ticket ngoài bộ. |
 | 3 | | base · prepared | (cổng vòng 1 đã chốt) | | | | | |
-| 4 | | | | | | | | |
+| 4 | `R-base-after-20261118-164149-e04e78` | base · after | Thêm cấu hình 2.9–2.10 (`operating_gates.json`: trần ngày 2.000.000đ, ngân sách tiền máy 1.500đ, `decision_note: true`, kiểm mẫu 10%, lọc trường PII, bắt buộc nguyên nhân khi ghi lỗi hãng) trên cùng bốn cổng code | 1,0 [1,0; 1,0] | 1,0 | 0đ · 0 · 0 | 0,2273 trong chỉ số ký; **0,2727** trong khối hàng chờ (6 ca/ngày, đã cộng kiểm mẫu 10%) | Mọi ngưỡng đã ký đạt; chi phí 4.456đ/ticket, ROI 1,24, không ca ùn. Lưu ý: tỉ lệ chuyển người trong khối hàng chờ (0,2727) vượt mức 0,25 của tiêu chí, dù chỉ số `escalation_rate` dùng để chấm (0,2273) vẫn đạt. Cần nói rõ khi ra quyết định v1. |
 
 ---
 
@@ -415,22 +415,22 @@ bao nhiêu thời gian? (3) Có phần nào của dự án không nên làm ti�
 
 | | **v1** (phút 105–115, TRƯỚC khi nhận thẻ sự cố) |
 |---|---|
-| Commit ký tiêu chí (message `Sign acceptance criteria`; hash commit, tuỳ chọn) | |
-| Hash chốt cổng vòng 1 (8 ký tự lệnh `lab10.checkpoint` in ra, tuỳ chọn) | |
-| Mã lần chạy dùng làm bằng chứng | bộ nền, mốc base: ________ · bộ nền với cổng vòng 1 (prepared): ________ |
-| Còn dòng "vượt trần" nào trong report? (hàng chờ, chi phí, ROI, trần tiền, pháp lý) | |
-| Kho hoặc hãng có số xấu nhất: ____. Nếu chỉ nhìn phân khúc này, quyết định có đổi không? *(Đọc khối "theo kho và hãng" ở cuối output `lab10.eval` / `lab10.grade`, hoặc mục `by_segment` trong `report.json`.)* | |
-| Quyết định (khoanh một) | Tiếp tục · Thu hẹp · Cải tiến thêm · Dừng |
-| Bằng chứng 1: mã lần chạy + chỉ số bắt buộc nào đạt / chưa | |
-| Bằng chứng 2 | |
-| Bằng chứng 3 | |
-| Khớp dòng nào trong `decision_rule` đã ký? | |
-| Nếu Thu hẹp: cắt phần nào, vì sao | |
-| Nếu Cải tiến thêm: giả thuyết cụ thể + hạn | |
-| Nếu Dừng: bài học ghi lại | |
-| Một bằng chứng còn thiếu (thứ bộ nền chưa đo được) | |
-| Ngày quyết định lại (trừ khi Dừng) | |
-| PIC ký | |
+| Commit ký tiêu chí (message `Sign acceptance criteria`; hash commit, tuỳ chọn) | `4192e12` |
+| Hash chốt cổng vòng 1 (8 ký tự lệnh `lab10.checkpoint` in ra, tuỳ chọn) | `437b79da` |
+| Mã lần chạy dùng làm bằng chứng | bộ nền, mốc base: `R-base-before-20261118-155125-b45eeb` · bộ nền với cổng vòng 1 (prepared): `R-base-prepared-20261118-164425-e04e78` |
+| Còn dòng "vượt trần" nào trong report? (hàng chờ, chi phí, ROI, trần tiền, pháp lý) | **Không.** Report prepared ghi "vượt trần: không": chi phí 4.456đ (≤ 8.000đ), ROI 1,24 (≥ 0,25), 0 ca ùn (hạn 60 phút), tổng hoàn tự động 155.000đ so với trần 2.000.000đ, pháp lý 0 lỗi. Hai điểm cần đọc kèm, không phải vượt trần: tỉ lệ chuyển người trong khối hàng chờ là 0,2727 (đã cộng kiểm mẫu 10%) trong khi chỉ số chấm `escalation_rate` là 0,2273 (đạt ≤ 0,25), và nhóm kho "?" tốn 10.359đ/ticket. |
+| Kho hoặc hãng có số xấu nhất: ____. Nếu chỉ nhìn phân khúc này, quyết định có đổi không? *(Đọc khối "theo kho và hãng" ở cuối output `lab10.eval` / `lab10.grade`, hoặc mục `by_segment` trong `report.json`.)* | **Kho "?" (đơn chưa gắn kho, 5 lần chạy): 10.359đ/ticket, cao hơn làm tay 10.000đ**; về chất lượng, mọi kho và hãng đều 1,0 ở mốc prepared (trước cổng, xấu nhất là HCM và VNX do `T-002@55`). Nhóm "?" chỉ có 1 ticket (đơn không tìm thấy, chuyển người) và tốn công người nên không đổi quyết định, nhưng ghi vào rủi ro còn lại: ngoài phạm vi kho đã biết thì chi phí vượt làm tay. |
+| Quyết định (khoanh một) | **Tiếp tục** *(Tiếp tục · Thu hẹp · Cải tiến thêm · Dừng)* |
+| Bằng chứng 1: mã lần chạy + chỉ số bắt buộc nào đạt / chưa | `R-base-prepared-20261118-164425-e04e78`: cả 5 chỉ số bắt buộc đạt: `pass_rate` 1,0 [1,0; 1,0] (≥ 0,98), `pass_k` 1,0 (≥ 0,95), hoàn sai 0đ, lỗi hãng oan 0, lộ PII 0. |
+| Bằng chứng 2 | Cùng lần chạy, ba ngưỡng kinh doanh/vận hành đã ký đều đạt: chi phí 4.456đ/ticket (≤ 8.000đ; làm tay 10.000đ), ROI 1,24 (≥ 0,25), `queue_stuck` 0; `escalation_rate` 0,2273 (≤ 0,25). |
+| Bằng chứng 3 | Bằng chứng trước/sau cổng: `R-base-before-20261118-155125-b45eeb` còn hoàn sai 20.000đ và 1 lỗi hãng oan (`T-002@55`); sau 4 cổng (B7.1) cả hai về 0. `python3 -m unittest discover -s tests`: 13 test OK; hai ticket hiểm B7.3 (`O-1024`, `O-1026`) giữ được tính chất. |
+| Khớp dòng nào trong `decision_rule` đã ký? | Dòng **Tiếp tục**: "Mọi ngưỡng required và business_ops đạt trên bộ nền…"; v1 chỉ dựa trên bộ nền, v2 phải có thêm gói sự cố. Chỉ số nên có `escalation_rate` 0,2273 ≤ 0,25 nên không cần kế hoạch theo dõi riêng; vẫn ghi nhận mức 0,2727 trong hàng chờ. |
+| Nếu Thu hẹp: cắt phần nào, vì sao | Không áp dụng (không chọn Thu hẹp). |
+| Nếu Cải tiến thêm: giả thuyết cụ thể + hạn | Không áp dụng. |
+| Nếu Dừng: bài học ghi lại | Không áp dụng. |
+| Một bằng chứng còn thiếu (thứ bộ nền chưa đo được) | Bộ nền chỉ có 22 ticket đều `legit` (`attack_pass` = [0, 0], không có ca tấn công) và dùng MockLLM tất định, nên chưa đo được: ticket cài lệnh hoặc lời khách mâu thuẫn tracking ở nhiều seed, gói sự cố, bài kiểm tra ẩn, giờ cao điểm (`429`, `fail_open`) và khi chính sách đổi sang REFUND-v4 ngày 01/12/2026. Cổng đã thấy điều này ở hai ticket hiểm nhưng chưa đo ở quy mô. |
+| Ngày quyết định lại (trừ khi Dừng) | Quyết định v2 ngay sau khi nhận thẻ sự cố (cùng buổi, ngày 18/11/2026); xét lại tiêu chí và phạm vi trước khi mở pilot thật vào **19/11/2026 (GMT+7)** theo Phiếu A mục A4. |
+| PIC ký | Nguyễn Triều Dương (vai Sản phẩm và kinh doanh, người ký tiêu chí); PIC vận hành: Lê Thanh Tùng (`NV-TUNG`) theo `operations.pic`. |
 
 Xong v1 thì lưu và đẩy một bản (sau mốc này không sửa cột v1):
 
