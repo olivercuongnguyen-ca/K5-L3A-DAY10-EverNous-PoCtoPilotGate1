@@ -20,7 +20,7 @@ rồi mới chạy đánh giá. Khối 1 không sửa code.
 
 ### Câu 1.1 · Một mục tiêu cấp hệ thống (khác "model trả lời đúng")
 
-> …
+> Giúp khách hàng được hoàn tiền do giao trễ nhanh và đúng chính sách, đồng thời kiểm soát chi phí và tránh gây thiệt hại cho khách hàng, shop hoặc hãng vận chuyển.
 
 ### Câu 1.2 · Mục tiêu nhìn từ hai người
 
