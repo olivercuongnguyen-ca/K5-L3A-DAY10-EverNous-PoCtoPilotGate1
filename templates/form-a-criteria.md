@@ -48,12 +48,12 @@ trợ lý có đang gây thiệt hại cho bên ngoài LogiX không; không có 
 
 | | Offline, cho MỘT bước (câu 1.3) | Telemetry production (câu 1.4) |
 |---|---|---|
-| **Bước / hành vi được đo** | | |
-| **Thước đo** (một câu, có đơn vị) | | |
-| **Dữ liệu** (lấy ở đâu, bao nhiêu, ai gán nhãn) | | |
-| **Cách tính** (công thức, mẫu số, cách xử lý ca thiếu dữ liệu) | | |
+| **Bước / hành vi được đo** | Phiên bản chính sách hoàn tiền: vì chính sách có nhiều bản: dùng không đúng bản có thể gây đền thiếu -> mất uy tín hay đền dư -> gây lỗ tiền| |
+| **Thước đo** (một câu, có đơn vị) | Tỉ lệ % lần chạy agent dùng chính sách khác với chính sách  có hiệu lực theo ngày  | |
+| **Dữ liệu** (lấy ở đâu, bao nhiêu, ai gán nhãn) | Agent chọn bản nào: sự kiện `policy` (trường `policy_id`) trong `runs/<mã>/traces/`. Bản đúng: bản có ngày hiệu lực chứa `as_of` trong `data/world.json` → `policies[]` (hôm nay là REFUND-v3). Không cần ai gán nhãn, đáp án suy ra từ ngày. 22 ticket × 5 seed `[SYNTHETIC]`. | |
+| **Cách tính** (công thức, mẫu số, cách xử lý ca thiếu dữ liệu) | Số lần `policy_id` khác bản đúng, chia cho số lần chạy có sự kiện `policy`, nhân 100%. Lần chạy không tới bước này (chuyển người duyệt sớm, không tìm thấy đơn...) bị loại khỏi mẫu số và đếm riêng. | |
 | **Khung thời gian / ngưỡng báo động** | (không áp dụng) | |
-| **Điểm mù** (thước đo này KHÔNG thấy gì) | | |
+| **Điểm mù** (thước đo này KHÔNG thấy gì) | (1) Hôm nay (16/11) chọn đúng nên kết quả có thể là 0%, nhưng chưa thử khi chính sách đổi sang v4 (1/12). (2) Chỉ kiểm chọn đúng bản, không kiểm tính tiền đúng. (3) Tin rằng ngày hiệu lực trong dữ liệu khớp văn bản thật. | |
 
 **Ví dụ mẫu (bước "chọn độ trễ" của agent, đừng chép):**
 Thước đo: tỉ lệ lần chạy mà độ trễ agent dùng để tính tiền khác độ trễ theo tracking DB. Dữ liệu: sự kiện `proposal.delay_days_used`
